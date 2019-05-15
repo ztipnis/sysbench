@@ -75,6 +75,13 @@ function sysbench.rand.string(fmt)
    return ffi.string(buf, buflen)
 end
 
+function sysbench.rand.compressable_string(len, nnum, nchar, compressability)
+   local cprs_ratio = 1/compressability
+   local buf = ffi.new("uint8_t[?]", len)
+   ffi.C.sb_rand_compressible(len, nnum, nchar, cprs_ratio, buf)
+   return ffi.string(buf, len)
+end
+
 function sysbench.rand.varstring(min_len, max_len)
    assert(min_len <= max_len)
    assert(max_len > 0)

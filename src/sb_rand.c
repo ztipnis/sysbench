@@ -342,6 +342,34 @@ void sb_rand_str(const char *fmt, char *buf)
       buf[i] = fmt[i];
   }
 }
+/*
+  Generates a random string with a fixed block format, a certain number of blocks, and a fixed compressability ratio
+ */
+void sb_rand_compressible(uint32_t size, uint32_t num_frequency, uint32_t char_frequency, const unsigned double* compressability, char* buf){
+  unsigned int totalNum = num_frequency * ((double)size / (double)(num_frequency + char_frequency));
+  unsigned int totalChar = size - totalNum;
+  totalNum *= compressability;
+  totalChar *= compressability;
+  totalNum = totalNum < 1 ? 1 : totalNum;
+  totalChar = totalChar < 1 ? 1 : totalChar;
+  char* buf2 = malloc((totalChar + totalNum) * sizeof(char));
+  for(unsigned int i = totalChar+totalNum; i > 0; i--){
+    uint32_t t = sb_rand_uniform(0,1);
+    buf2[i-1] = t > 0 ? sb_rand_uniform('0', '9') : sb_rand_uniform('a', 'z');
+    if(t > 0 && totalNum > 0){
+      buf2[i-1] = sb_rand_uniform('0', '9');
+      totalNum--;
+    }else{
+      buf2[i-1] = sb_rand_uniform('a', 'z');
+      totalChar--;
+    }
+  }
+  for(unsigned int i = 0; i < size; i++){
+    char n = buf2[i % strlen(buf2)];
+    buf[i] = n;
+  }
+  free(buf2);
+}
 
 /*
   Generates a random string of ASCII characters between '0' and 'z' of a length

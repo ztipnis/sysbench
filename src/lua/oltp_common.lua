@@ -78,7 +78,8 @@ sysbench.cmdline.options = {
           "PostgreSQL driver. The only currently supported " ..
           "variant is 'redshift'. When enabled, " ..
           "create_secondary is automatically disabled, and " ..
-          "delete_inserts is set to 0"}
+          "delete_inserts is set to 0"},
+   string_compressibility_ratio = {"Compression ratio of string (higher is more compressible)", 1}
 }
 
 -- Prepare the dataset. This command supports parallel execution, i.e. will
@@ -137,21 +138,21 @@ sysbench.cmdline.commands = {
 -- Template strings of random digits with 11-digit groups separated by dashes
 
 -- 10 groups, 119 characters
-local c_value_template = "###########-###########-###########-" ..
-   "###########-###########-###########-" ..
-   "###########-###########-###########-" ..
-   "###########"
+--local c_value_template = "###########-###########-###########-" ..
+--   "###########-###########-###########-" ..
+--   "###########-###########-###########-" ..
+--  "###########"
 
 -- 5 groups, 59 characters
-local pad_value_template = "###########-###########-###########-" ..
-   "###########-###########"
+--local pad_value_template = "###########-###########-###########-" ..
+--   "###########-###########"
 
 function get_c_value()
-   return sysbench.rand.string(c_value_template)
+   return sysbench.rand.compressable_string(119, 1, 0, sysbench.opt.string_compressibility_ratio)
 end
 
 function get_pad_value()
-   return sysbench.rand.string(pad_value_template)
+   return sysbench.rand.compressable_string(59, 1, 0, sysbench.opt.string_compressibility_ratio)
 end
 
 function create_table(drv, con, table_num)
