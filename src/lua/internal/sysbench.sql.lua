@@ -351,6 +351,23 @@ function sql_param.set(self, value)
    end
 end
 
+
+function sql_param.set_rand_str_cpr(self, len, nnum, nchar, compressability)
+   local sql_type = sysbench.sql.type
+   local btype = self.type
+   self.is_null[0] = false
+   if btype == sql_type.CHAR or
+      btype == sql_type.VARCHAR
+   then
+      
+      len = self.max_len < len and self.max_len or len
+      ffi.C.sb_rand_compressible(len, nnum, nchar, 1/compressability, self.buffer)
+      self.data_len[0] = len
+   else
+      error("Unsupported argument type: " .. btype, 2)
+   end
+end
+
 function sql_param.set_rand_str(self, fmt)
    local sql_type = sysbench.sql.type
    local btype = self.type
