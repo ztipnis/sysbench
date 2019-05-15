@@ -345,11 +345,11 @@ void sb_rand_str(const char *fmt, char *buf)
 /*
   Generates a random string with a fixed block format, a certain number of blocks, and a fixed compressability ratio
  */
-void sb_rand_compressible(uint32_t size, uint32_t num_frequency, uint32_t char_frequency, const double* compressability, char* buf){
+void sb_rand_compressible(uint32_t size, uint32_t num_frequency, uint32_t char_frequency, double compressability, char* buf){
   unsigned int totalNum = num_frequency * ((double)size / (double)(num_frequency + char_frequency));
   unsigned int totalChar = size - totalNum;
-  totalNum = (int)((double) totalNum * *compressability);
-  totalChar = (int)((double) totalChar * *compressability);
+  totalNum = (int)((double) totalNum * compressability);
+  totalChar = (int)((double) totalChar * compressability);
   totalNum = totalNum < 1 ? 1 : totalNum;
   totalChar = totalChar < 1 ? 1 : totalChar;
   char* buf2 = malloc((totalChar + totalNum) * sizeof(char));
