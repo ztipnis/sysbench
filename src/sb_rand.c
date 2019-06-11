@@ -355,10 +355,10 @@ void sb_rand_compressible(uint32_t size, uint32_t num_frequency, uint32_t char_f
   totalChar = totalChar < 1 ? 1 : totalChar;
   char* buf2 = malloc((totalChar + totalNum) * sizeof(char));
   for(int i = 0; i < totalChar; i++){
-     buf2[i] = '@'
+     buf2[i] = '@';
   }
   for(int i = totalChar; i < (totalNum+totalChar); i++){
-    buf2[i] = '#'
+    buf2[i] = '#';
   }
   sb_rand_str(buf2, buf2);
   for(unsigned int i = 0; i < size; i++){
