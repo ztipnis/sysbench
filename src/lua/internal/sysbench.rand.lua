@@ -80,7 +80,14 @@ function sysbench.rand.compressable_string(len, nnum, nchar, compressability)
    local cprs_ratio = 1/compressability
    local buf = ffi.new("uint8_t[?]", len)
    ffi.C.sb_rand_compressible(len, nnum, nchar, cprs_ratio, buf)
-   return ffi.string(buf, len)
+   local str = ffi.string(buf, len)
+   local s = ""
+   for i = 1, str:len() do
+      if str:byte(i) >= 32 and str:byte(i) <= 126 then
+         s = s .. str:sub(i,i)
+      end
+   end
+   return s
 end
 
 function sysbench.rand.varstring(min_len, max_len)
